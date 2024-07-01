@@ -14,7 +14,36 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
+  id          Int         @id @default(autoincrement())
+  username    String      @unique
+  password    String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
+  deletedAt   DateTime?
+  tweets      Tweet[]
+  currentUser FollowMap[] @relation("CurrentUser")
+  following   FollowMap[] @relation("Following")
+}
+
+model Tweet {
+  id        Int       @id @default(autoincrement())
+  content   String
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  deletedAt DateTime?
+}
+
+model FollowMap {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation("CurrentUser", fields: [userId], references: [id])
+  followingId Int
+  following   User      @relation("Following", fields: [followingId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  deletedAt   DateTime?
+
+  @@unique([userId, followingId])
 }

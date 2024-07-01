@@ -1,7 +1,9 @@
 import { Module, Logger } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
+import { TweetsModule } from './v1/tweets/tweets.module';
+import { UsersModule } from './v1/users/users.module';
+import { FollowMapsModule } from './v1/follow-maps/follow-maps.module';
+import { AuthModule } from './v1/auth/auth.module';
 
 let envFilePath: string = '.env';
 
@@ -20,8 +22,12 @@ switch (`${process.env.NODE_ENV}`) {
 }
 
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath })],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({ envFilePath, isGlobal: true }),
+    AuthModule,
+    TweetsModule,
+    UsersModule,
+    FollowMapsModule,
+  ],
 })
 export class AppModule {}
