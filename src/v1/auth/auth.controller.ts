@@ -4,7 +4,6 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Logger,
   Post,
   Req,
   Request,
@@ -52,7 +51,6 @@ export class AuthController {
   async getProfile(@Req() request) {
     const jwtPayload = request['jwtPayload'] as JwtPayload;
     const user = await this.usersService.findOne(jwtPayload.username);
-    Logger.log('USER: ', user);
     if (user) {
       delete user.password;
       return user;

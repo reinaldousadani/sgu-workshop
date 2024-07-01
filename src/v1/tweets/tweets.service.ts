@@ -1,26 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTweetDto } from './dto/create-tweet.dto';
+import { PrismaService } from 'src/prisma.service';
+import User from '../users/entities/user.entity';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
+
+const DATA_PER_PAGE = 20;
 
 @Injectable()
 export class TweetsService {
-  create(createTweetDto: CreateTweetDto) {
-    return 'This action adds a new tweet';
+  constructor(private prisma: PrismaService) {}
+
+  findMany(page: number) {
+    return this.prisma.tweet.findMany({
+      where: { deletedAt: null },
+      skip: (page - 1) * DATA_PER_PAGE,
+      take: DATA_PER_PAGE,
+    });
   }
 
-  findAll() {
-    return `This action returns all tweets`;
+  create(createTweetDto: CreateTweetDto, user: User) {
+    return this.prisma.tweet.create({
+      data: {
+        ...createTweetDto,
+        createdAt: new Date(),
+        updatedAt: null,
+        deletedAt: null,
+        userId: user.id,
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} tweet`;
+    return this.prisma.tweet.findUnique({
+      where: { id, AND: { deletedAt: null } },
+    });
   }
 
-  update(id: number, updateTweetDto: UpdateTweetDto) {
-    return `This action updates a #${id} tweet`;
+  update(updateTweetDto: UpdateTweetDto, id: number) {
+    return this.prisma.tweet.update({
+      where: { id, AND: { deletedAt: null } },
+      data: { ...updateTweetDto, updatedAt: new Date() },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tweet`;
+  deleteOne(id: number) {
+    return this.prisma.tweet.update({
+      where: { id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }
