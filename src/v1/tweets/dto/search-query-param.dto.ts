@@ -1,6 +1,7 @@
-import { IsNumberString } from 'class-validator';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 export class SearchQueryParamDto {
   @IsNumberString()
-  page: number;
+  @IsOptional()
+  page?: number;
 }
