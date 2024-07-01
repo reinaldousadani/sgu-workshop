@@ -1,1 +1,3 @@
-export class Tweet {}
+import { Tweet } from '@prisma/client';
+
+export default Tweet;
