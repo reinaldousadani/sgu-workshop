@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTweetDto } from './dto/create-tweet.dto';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../../prisma.service';
 import User from '../users/entities/user.entity';
 import { UpdateTweetDto } from './dto/update-tweet.dto';
 
-const DATA_PER_PAGE = 20;
+export const DATA_PER_PAGE = 20;
 
 @Injectable()
 export class TweetsService {

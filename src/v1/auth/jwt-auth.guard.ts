@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-@Injectable({})
+@Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
@@ -14,7 +14,7 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const bearerAccessToken: string = request.cookies['access_token'];
 
-    if (!bearerAccessToken) {
+    if (!bearerAccessToken || typeof bearerAccessToken !== 'string') {
       throw new UnauthorizedException();
     }
 
