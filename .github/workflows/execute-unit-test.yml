@@ -1,0 +1,31 @@
+name: Execute Unit Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Pre-Merge-Actions:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install dotenv globally
+        run: npm i -g dotenv
+
+      - name: Generate Prisma Client
+        run: dotenv -e .env.test.local -- npx prisma migrate dev
+
+      - name: Run Unit Tests
+        run: npm run test:cov
