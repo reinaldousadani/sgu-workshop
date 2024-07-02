@@ -1,0 +1,30 @@
+name: Execute Scheduled E2E Tests
+
+on:
+  schedule:
+    - cron: '0 * * * *' # This cron expression runs the workflow at the start of every hour
+
+jobs:
+  Scheduled-E2E-Tests:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Install dotenv globally
+        run: npm i -g dotenv-cli
+
+      - name: Generate Prisma Client
+        run: dotenv -e .env.test.local -- npx prisma migrate dev
+
+      - name: Run E2E Tests
+        run: npm run test:e2e
