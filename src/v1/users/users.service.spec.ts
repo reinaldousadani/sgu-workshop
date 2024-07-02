@@ -53,7 +53,7 @@ describe('UsersService', () => {
       expect(prisma.user.create).toHaveBeenCalledWith({
         data: {
           ...createUserDto,
-          createdAt: createdUser.createdAt,
+          createdAt: expect.any(Date),
           updatedAt: null,
           deletedAt: null,
         },

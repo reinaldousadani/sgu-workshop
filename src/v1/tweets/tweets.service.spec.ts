@@ -106,7 +106,7 @@ describe('TweetsService', () => {
       expect(prisma.tweet.create).toHaveBeenCalledWith({
         data: {
           ...createTweetDto,
-          createdAt: currDate,
+          createdAt: expect.any(Date),
           updatedAt: null,
           deletedAt: null,
           userId: user.id,
@@ -165,7 +165,6 @@ describe('TweetsService', () => {
       const updateTweetDto: UpdateTweetDto = {
         content: 'Lorem Ipsum - Edited',
       };
-      const currDate = new Date();
       const mockResult = {
         id: 1,
         content: 'Lorem Ipsum - Edited',
@@ -180,7 +179,7 @@ describe('TweetsService', () => {
       expect(result).toEqual(mockResult);
       expect(prisma.tweet.update).toHaveBeenCalledWith({
         where: { id, AND: { deletedAt: null } },
-        data: { ...updateTweetDto, updatedAt: currDate },
+        data: { ...updateTweetDto, updatedAt: expect.any(Date) },
       });
     });
     it('should throw an error if update a tweet fails', async () => {
