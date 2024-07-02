@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Install dotenv globally
-        run: npm i -g dotenv
+        run: npm i -g dotenv-cli
 
       - name: Generate Prisma Client
         run: dotenv -e .env.test.local -- npx prisma migrate dev
